@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Herramientas · Universal Assistance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ua-blue:#00528F;--ua-dark:#002447;--ua-teal:#008091;
+  --ua-cyan:#00C4DF;--ua-pink:#ff436e;
+  --bg:#F0F6FA;--surface:#fff;--surface2:#E6F0F8;
+  --border:rgba(0,82,143,.12);--border2:rgba(0,82,143,.25);
+  --muted:#4a6d8c;--hint:#8aabcc;
+  --green:#0a7c4e;--green-bg:#e3f5ed;--red:#cc2b4a;--red-bg:#fce8ec;
+  --r:10px;
+}
+html,body{min-height:100%;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ua-dark);-webkit-font-smoothing:antialiased}
+.ua-bar{background:linear-gradient(135deg,var(--ua-dark) 0%,var(--ua-blue) 60%,var(--ua-teal) 100%);border-bottom:2px solid var(--ua-cyan);position:sticky;top:0;z-index:10;}
+.ua-bar-inner{max-width:1160px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.back-link{font-size:12px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .15s;}
+.back-link:hover{color:#fff;}
+.user-info{font-size:11px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:8px;}
+.btn-logout{font-size:11px;color:rgba(255,255,255,.6);background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
+.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,.7);}
+.hero{background:linear-gradient(135deg,var(--ua-dark) 0%,var(--ua-blue) 50%,var(--ua-teal) 100%);padding:2.5rem 2rem;text-align:center;}
+.hero .flag{width:56px;border-radius:6px;margin-bottom:.75rem;box-shadow:0 2px 10px rgba(0,0,0,.25);}
+.hero h1{font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:.4rem;}
+.hero p{font-size:13px;color:rgba(255,255,255,.75);max-width:460px;margin:0 auto;line-height:1.6;}
+main{max-width:1000px;margin:0 auto;padding:2.5rem 2rem;}
+.section-label{font-size:11px;font-weight:700;color:var(--ua-teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:6px;}
+.section-label::before{content:'';display:inline-block;width:3px;height:12px;background:var(--ua-cyan);border-radius:2px;}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.tool-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:12px;text-decoration:none;color:inherit;transition:all .2s;}
+.tool-card:not(.disabled):hover{border-color:var(--ua-cyan);box-shadow:0 4px 16px rgba(0,82,143,.15);transform:translateY(-2px);}
+.tool-card.disabled{opacity:.5;cursor:default;}
+.tool-icon{width:40px;height:40px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.tool-card h3{font-size:15px;font-weight:700;color:var(--ua-dark);}
+.tool-card p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.tool-status{font-size:11px;font-weight:600;color:var(--ua-teal);margin-top:auto;}
+.tool-status.soon{color:var(--hint);}
+footer{text-align:center;font-size:11px;color:var(--hint);padding:2rem;border-top:1px solid var(--border);background:var(--surface);}
+@media(max-width:480px){
+  .hero h1{font-size:1.3rem;}
+  .ua-bar-inner{padding:0 1rem;}
+  main{padding:1.5rem 1rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="ua-bar">
+  <div class="ua-bar-inner">
+    <a class="back-link" href="index.html">← Países</a>
+    <div class="user-info">
+      <span id="user-email-bar"></span>
+      <button class="btn-logout" id="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <img class="flag" id="hero-flag" src="" alt="">
+  <h1 id="hero-title">Herramientas</h1>
+  <p>Elegí la herramienta a la que querés acceder para este país.</p>
+</div>
+
+<main>
+  <div class="section-label">Herramientas disponibles</div>
+  <div class="tools-grid" id="tools-grid"></div>
+</main>
+
+<footer>Esta herramienta se encuentra en fase de pruebas. · v1.7</footer>
+
+<script>
+// ---------------------------------------------------------------
+// Catálogo de herramientas del Centro UA. "enabled" se lee hoy de
+// un mock; en producción sale de Firestore: permissions/{pais}
+// con un boolean por tool.id (mismo esquema que usa el hub).
+// ---------------------------------------------------------------
+const TOOLS = [
+  { id: 'cobranding',  name: 'Compositor de Cobranding',   desc: 'Generá tu pieza de cobranding con el logo del partner.', url: (pais) => `pais.html?pais=${pais}`, icon: '🎨' },
+  { id: 'tarjetaqr',   name: 'Tarjetas Virtuales con QR',  desc: 'Tarjetas de contacto digitales con QR para ferias y eventos.', url: (pais) => `tarjetaqr/?pais=${pais}`, icon: '📇' },
+  { id: 'coverage',    name: 'Coverage Profile Generator', desc: 'Perfiles de cobertura por producto y mercado.', url: () => '#', icon: '🛡️' },
+  { id: 'flyers',      name: 'UA Flyers',                  desc: 'Editor de flyers institucionales.', url: () => '#', icon: '🖼️' },
+  { id: 'invitations', name: 'Invitation Editor',          desc: 'Invitaciones para Story y Email.', url: () => '#', icon: '✉️' },
+];
+
+// Mock de permisos por país — reemplazar por lectura real de Firestore.
+const PERMISSIONS = {
+  argentina:   { cobranding: true, tarjetaqr: true },
+  bolivia:     { cobranding: true, tarjetaqr: true },
+  chile:       { cobranding: true, tarjetaqr: true },
+  colombia:    { cobranding: true, tarjetaqr: true },
+  costa_rica:  { cobranding: true, tarjetaqr: true },
+  ecuador:     { cobranding: true, tarjetaqr: true },
+  el_salvador: { cobranding: true, tarjetaqr: true },
+  guatemala:   { cobranding: true, tarjetaqr: true },
+  honduras:    { cobranding: true, tarjetaqr: true },
+  mexico:      { cobranding: true, tarjetaqr: true },
+  nicaragua:   { cobranding: true, tarjetaqr: true },
+  panama:      { cobranding: true, tarjetaqr: true },
+  paraguay:    { cobranding: true, tarjetaqr: true },
+  peru:        { cobranding: true, tarjetaqr: true },
+  dominicana:  { cobranding: true, tarjetaqr: true },
+  uruguay:     { cobranding: true, tarjetaqr: true },
+};
+
+const COUNTRY_NAMES = {
+  argentina:'Argentina', bolivia:'Bolivia', chile:'Chile', colombia:'Colombia',
+  costa_rica:'Costa Rica', ecuador:'Ecuador', el_salvador:'El Salvador',
+  guatemala:'Guatemala', honduras:'Honduras', mexico:'México', nicaragua:'Nicaragua',
+  panama:'Panamá', paraguay:'Paraguay', peru:'Perú', dominicana:'Rep. Dominicana', uruguay:'Uruguay'
+};
+const COUNTRY_FLAGS = {
+  argentina:'ar', bolivia:'bo', chile:'cl', colombia:'co', costa_rica:'cr', ecuador:'ec',
+  el_salvador:'sv', guatemala:'gt', honduras:'hn', mexico:'mx', nicaragua:'ni', panama:'pa',
+  paraguay:'py', peru:'pe', dominicana:'do', uruguay:'uy'
+};
+
+// ── Sesión (mismo esquema que index.html / pais.html) ──
+const SESSION_KEY = 'ua-session';
+function getSession() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    if (s && s.expiry > Date.now()) return s;
+  } catch (e) {}
+  return null;
+}
+const session = getSession();
+if (!session) {
+  window.location.href = 'index.html';
+} else {
+  document.getElementById('user-email-bar').textContent = session.email;
+}
+document.getElementById('btn-logout').addEventListener('click', () => {
+  localStorage.removeItem(SESSION_KEY);
+  window.location.href = 'index.html';
+});
+
+// ── Render ──
+const params = new URLSearchParams(window.location.search);
+const pais = params.get('pais') || '';
+const name = COUNTRY_NAMES[pais] || pais;
+document.getElementById('hero-title').textContent = name;
+document.getElementById('hero-flag').src = `https://flagcdn.com/w80/${COUNTRY_FLAGS[pais] || 'ar'}.png`;
+document.title = `${name} · Universal Assistance`;
+
+const perms = PERMISSIONS[pais] || {};
+const grid = document.getElementById('tools-grid');
+grid.innerHTML = TOOLS.map(t => {
+  const enabled = !!perms[t.id];
+  const inner = `
+    <div class="tool-icon">${t.icon}</div>
+    <h3>${t.name}</h3>
+    <p>${t.desc}</p>
+    <div class="tool-status ${enabled ? '' : 'soon'}">${enabled ? 'Disponible →' : 'Próximamente'}</div>
+  `;
+  return enabled
+    ? `<a class="tool-card" href="${t.url(pais)}">${inner}</a>`
+    : `<div class="tool-card disabled">${inner}</div>`;
+}).join('');
+</script>
+
+</body>
+</html>
