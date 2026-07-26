@@ -23,16 +23,16 @@ html,body{height:100%}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#222;display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
 /* ── UA BAR (cascarón, idéntico al resto del sitio) ── */
-.ua-bar{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--ua-dark) 0%,var(--ua-blue) 60%,var(--ua-mid) 100%);border-bottom:2px solid var(--ua-cyan);}
-.ua-bar-inner{padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.ua-bar{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--ua-dark) 0%,var(--ua-blue) 60%,var(--ua-mid) 100%);border-bottom:2px solid var(--ua-cyan);position:sticky;top:0;z-index:21;}
+.ua-bar-inner{max-width:1160px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
 .ua-bar-inner img{height:40px;width:auto;}
 .user-info{font-size:11px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:8px;}
 .btn-logout{font-size:11px;color:rgba(255,255,255,.6);background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
 .btn-logout:hover{color:#fff;border-color:rgba(255,255,255,.7);}
 .back-link{font-size:12px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .15s;}
 .back-link:hover{color:#fff;}
-.ua-header{font-family:'Poppins',sans-serif;background:rgba(255,255,255,.95);border-bottom:2px solid var(--ua-cyan);}
-.hinner{padding:0 2rem;height:48px;display:flex;align-items:center;justify-content:space-between;}
+.ua-header{font-family:'Poppins',sans-serif;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:2px solid var(--ua-cyan);position:sticky;top:60px;z-index:20;}
+.hinner{max-width:1160px;margin:0 auto;padding:0 2rem;height:54px;display:flex;align-items:center;justify-content:space-between;}
 .brand{font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ua-blue);display:flex;align-items:center;gap:8px;text-transform:uppercase;}
 .brand-dot{width:8px;height:8px;border-radius:50%;background:var(--ua-cyan);flex-shrink:0;}
 footer{font-family:'Poppins',sans-serif;text-align:center;font-size:11px;color:var(--hint);padding:.85rem 2rem;border-top:1px solid var(--border);background:var(--surface);}
@@ -1129,6 +1129,7 @@ window.addEventListener('load',function(){
       loggedEmail = 'demo.local@universal-assistance.com';
       document.getElementById('loginOverlay').style.display='none';
       showUserBar(loggedEmail);
+      openModal('onboardModal');
       if(loadDraft()) render();
       return;
     }
@@ -1140,6 +1141,7 @@ window.addEventListener('load',function(){
           loggedEmail=session.email;
           document.getElementById('loginOverlay').style.display='none';
           showUserBar(loggedEmail);
+          openModal('onboardModal');
           // Load draft
           if(loadDraft()) render();
         }
