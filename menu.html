@@ -86,29 +86,29 @@ footer{text-align:center;font-size:11px;color:var(--hint);padding:2rem;border-to
 const TOOLS = [
   { id: 'cobranding',  name: 'Compositor de Cobranding',   desc: 'Generá tu pieza de cobranding con el logo del partner.', url: (pais) => `pais.html?pais=${pais}`, icon: '🎨' },
   { id: 'tarjetaqr',   name: 'Tarjetas Virtuales con QR',  desc: 'Tarjetas de contacto digitales con QR para ferias y eventos.', url: (pais) => `tarjetaqr/?pais=${pais}`, icon: '📇' },
-  { id: 'coverage',    name: 'Coverage Profile Generator', desc: 'Perfiles de cobertura por producto y mercado.', url: () => '#', icon: '🛡️' },
+  { id: 'coverage',    name: 'Generador de Perfiles de Cobertura', desc: 'Armá el perfil de coberturas del cliente y descargalo en PDF.', url: (pais) => `generador-perfiles/?pais=${pais}`, icon: '🛡️' },
   { id: 'flyers',      name: 'UA Flyers',                  desc: 'Editor de flyers institucionales.', url: () => '#', icon: '🖼️' },
   { id: 'invitations', name: 'Invitation Editor',          desc: 'Invitaciones para Story y Email.', url: () => '#', icon: '✉️' },
 ];
 
 // Mock de permisos por país — reemplazar por lectura real de Firestore.
 const PERMISSIONS = {
-  argentina:   { cobranding: true, tarjetaqr: true },
-  bolivia:     { cobranding: true, tarjetaqr: true },
-  chile:       { cobranding: true, tarjetaqr: true },
-  colombia:    { cobranding: true, tarjetaqr: true },
-  costa_rica:  { cobranding: true, tarjetaqr: true },
-  ecuador:     { cobranding: true, tarjetaqr: true },
-  el_salvador: { cobranding: true, tarjetaqr: true },
-  guatemala:   { cobranding: true, tarjetaqr: true },
-  honduras:    { cobranding: true, tarjetaqr: true },
-  mexico:      { cobranding: true, tarjetaqr: true },
-  nicaragua:   { cobranding: true, tarjetaqr: true },
-  panama:      { cobranding: true, tarjetaqr: true },
-  paraguay:    { cobranding: true, tarjetaqr: true },
-  peru:        { cobranding: true, tarjetaqr: true },
-  dominicana:  { cobranding: true, tarjetaqr: true },
-  uruguay:     { cobranding: true, tarjetaqr: true },
+  argentina:   { cobranding: true, tarjetaqr: true, coverage: true },
+  bolivia:     { cobranding: true, tarjetaqr: true, coverage: true },
+  chile:       { cobranding: true, tarjetaqr: true, coverage: true },
+  colombia:    { cobranding: true, tarjetaqr: true, coverage: true },
+  costa_rica:  { cobranding: true, tarjetaqr: true, coverage: true },
+  ecuador:     { cobranding: true, tarjetaqr: true, coverage: true },
+  el_salvador: { cobranding: true, tarjetaqr: true, coverage: true },
+  guatemala:   { cobranding: true, tarjetaqr: true, coverage: true },
+  honduras:    { cobranding: true, tarjetaqr: true, coverage: true },
+  mexico:      { cobranding: true, tarjetaqr: true, coverage: true },
+  nicaragua:   { cobranding: true, tarjetaqr: true, coverage: true },
+  panama:      { cobranding: true, tarjetaqr: true, coverage: true },
+  paraguay:    { cobranding: true, tarjetaqr: true, coverage: true },
+  peru:        { cobranding: true, tarjetaqr: true, coverage: true },
+  dominicana:  { cobranding: true, tarjetaqr: true, coverage: true },
+  uruguay:     { cobranding: true, tarjetaqr: true, coverage: true },
 };
 
 const COUNTRY_NAMES = {
