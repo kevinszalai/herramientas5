@@ -13,11 +13,11 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* Paleta oficial UA — solo para el cascarón del sitio (topbar/header/panel-head/footer).
+  /* Paleta oficial UA — solo para el cascarón del sitio (topbar/header/footer).
      El resto de la app (sidebar, botones, tabs y el diseño del PDF generado) mantiene su
      propia identidad navy/rosa (#0B1F3A / #E8196E), igual que en las demás herramientas. */
   --ua-blue:#00528F;--ua-dark:#002447;--ua-mid:#008091;--ua-cyan:#00C4DF;
-  --bg:#F0F6FA;--surface:#fff;--border:rgba(0,82,143,.12);--muted:#4a6d8c;--hint:#8aabcc;
+  --surface:#fff;--border:rgba(0,82,143,.12);--hint:#8aabcc;
 }
 html,body{height:100%}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#222;display:flex;flex-direction:column;height:100vh;overflow:hidden}
@@ -25,7 +25,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#222;displ
 /* ── UA BAR (cascarón, idéntico al resto del sitio) ── */
 .ua-bar{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--ua-dark) 0%,var(--ua-blue) 60%,var(--ua-mid) 100%);border-bottom:2px solid var(--ua-cyan);}
 .ua-bar-inner{padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
-.ua-bar-inner img{height:36px;width:auto;}
+.ua-bar-inner img{height:40px;width:auto;}
 .user-info{font-size:11px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:8px;}
 .btn-logout{font-size:11px;color:rgba(255,255,255,.6);background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
 .btn-logout:hover{color:#fff;border-color:rgba(255,255,255,.7);}
@@ -35,9 +35,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#222;displ
 .hinner{padding:0 2rem;height:48px;display:flex;align-items:center;justify-content:space-between;}
 .brand{font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ua-blue);display:flex;align-items:center;gap:8px;text-transform:uppercase;}
 .brand-dot{width:8px;height:8px;border-radius:50%;background:var(--ua-cyan);flex-shrink:0;}
-.panel-head{font-family:'Poppins',sans-serif;background:var(--bg);padding:1rem 2rem;}
-.panel-head h1{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.2rem;color:var(--ua-dark);}
-.panel-head p{font-size:12px;color:var(--muted);line-height:1.5;}
 footer{font-family:'Poppins',sans-serif;text-align:center;font-size:11px;color:var(--hint);padding:.85rem 2rem;border-top:1px solid var(--border);background:var(--surface);}
 
 .app{display:flex;flex:1;min-height:0;}
@@ -279,20 +276,12 @@ textarea{resize:none}
     <div class="brand"><span class="brand-dot"></span>Generador de Perfiles de Cobertura</div>
   </div>
 </header>
-<div class="panel-head">
-  <h1>Generador de Perfiles de Cobertura</h1>
-  <p>Armá el perfil de coberturas del cliente y descargalo en PDF listo para compartir.</p>
-</div>
 
 <!-- APP -->
 <div class="app">
   <div class="sidebar">
-    <div class="sidebar-header">
-      <img id="sidebarLogo" src="" alt="UA" style="height:28px;width:auto;display:block;margin-bottom:6px;filter:brightness(0) invert(1)">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <p style="color:rgba(255,255,255,.5);font-size:11px">Generador de Perfiles de Cobertura</p>
-        <button onclick="openHistory()" style="background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);font-size:11px;padding:4px 10px;border-radius:5px;cursor:pointer;font-family:inherit">📂 Historial</button>
-      </div>
+    <div class="sidebar-header" style="display:flex;justify-content:flex-end">
+      <button onclick="openHistory()" style="background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);font-size:11px;padding:4px 10px;border-radius:5px;cursor:pointer;font-family:inherit">📂 Historial</button>
     </div>
 
     <!-- STEP 0 -->
@@ -1106,7 +1095,6 @@ document.addEventListener('mouseup',function(){isResizing=false;document.body.st
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 document.getElementById('loginLogo').src = LOGO_DATA;
-document.getElementById('sidebarLogo').src = LOGO_DATA;
 document.getElementById('topbarLogo').src = LOGO_DATA;
 
 buildPlanNames(); buildCoverageRows(); buildFeatureRows(); buildPasteButtons(); render();
